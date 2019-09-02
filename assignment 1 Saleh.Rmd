@@ -1,0 +1,28 @@
+---
+title: "Assignment 1"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+fpe <- read.table("http://data.princeton.edu/wws509/datasets/effort.dat")
+fpe
+```
+
+```{r}
+attach(fpe)
+summary(fpe)
+```
+
+```{r}
+boxplot(effort, col="blue")
+title("Boxplot of effort", col.main="#3366CC")
+
+```
+
