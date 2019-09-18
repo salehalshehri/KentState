@@ -1,0 +1,60 @@
+
+R codes for assignment 2 (Quantitative Management Modeling)
+
+Note that lines that start with # are comments. 
+
+# now we will creat a linear programing codes to solve the (Weigelt Production) problem
+
+first we need to install the "lpSolve" Packages
+
+```{r,eval=FALSE}
+install.packages("lpSolveAPI")
+library(lpSolveAPI)
+
+```
+***
+
+```{r}
+# make an lp object with 0 constraints and 9 decision variables
+lprec <- make.lp(0, 9)
+
+# first setting the objective function
+set.objfn(lprec, c(420, 420, 420, 360, 360, 360, 300,300,300))
+
+# change the direction to set maximization for profit
+
+lp.control(lprec,sense='max')
+
+# setting the constraints
+add.constraint(lprec, c(1, 0, 0, 1, 0, 0, 1, 0, 0), "<=", 750)
+add.constraint(lprec, c(0, 1, 0, 0, 1, 0, 0, 1, 0), "<=", 900)
+add.constraint(lprec, c(0, 0, 1, 0, 0, 1, 0, 0, 1), "<=", 450)
+add.constraint(lprec, c(20, 0, 0, 15, 0, 0, 12, 0, 0), "<=", 13000)
+add.constraint(lprec, c(0, 20, 0, 0, 15, 0, 0, 12, 0), "<=", 12000)
+add.constraint(lprec, c(0, 0, 20, 0, 0, 15, 0, 0, 12), "<=", 5000)
+add.constraint(lprec, c(1, 1, 1, 0, 0, 0, 0, 0, 0), "<=", 900)
+add.constraint(lprec, c(0, 0, 0, 1, 1, 1, 0, 0, 0), "<=", 1200)
+add.constraint(lprec, c(0, 0, 0, 0, 0, 0, 1, 1, 1), "<=", 750)
+
+# To identify the variables and constraints, we can
+# set variable names and names of the constraints
+
+RowNames <- c("Plant1-capacity", "Plant2-capacity", "Plant3-Capacity", "Plant1-Storage", "Plant2-Storage", "Plant3-Storage", "Plant1-Sales", "Plant1-Sales", "Plant3-Storage")
+
+ColNames <- c("Large-P1", "Large-P2", "Large-P3", "Medium-P1", "Medium-P2", "Medium-P3", "Small-P1", "Small-P2", "Small-P3")
+
+# then we call for dimentaion's names
+dimnames(lprec) <- list(RowNames, ColNames)
+
+# Now, print out the model
+lprec
+
+```
+# We now solve the above LP problem, and output the objective function and variables
+```{r}
+solve(lprec)
+get.objective(lprec)
+get.variables(lprec)
+get.constraints(lprec)
+
+```
