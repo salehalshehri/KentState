@@ -1,0 +1,84 @@
+Solution of assignment 3:
+  
+  the dual solution
+  
+title: "Weigelt Corporation doual solution, the minimization problem"
+
+#This notebook contains the code for assignment 3. Specifically, the formulation for the Weigelt Corporation dual problem
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(warning = FALSE, message = FALSE)
+dir.create("images")
+```
+
+
+* Note that lines that start with # are comments. 
+
+```{r,eval=FALSE}
+
+library(lpSolveAPI)
+```
+***
+Let us set up the Weigelt Corporation problem. Note that we had nine decision variables, and nine constraints.
+In the first formulation, we will directly create the objective function and constraints
+```{r}
+# make an lp object with 0 constraints and 11 decision variables
+lprec <- make.lp(0, 11)
+
+# Now create the objective function. 
+set.objfn(lprec, c(750, 900, 450, 13000, 12000, 5000, 900, 1200, 750, 0, 0))
+
+# As the default is a minimization problem
+lp.control(lprec,sense='min')
+
+# Add the nine  constraints
+
+# 3 constrains for Production Capacity of the three plants
+add.constraint(lprec, c(1, 0, 0, 20, 0, 0, 1, 0, 0, 900, 450), ">=", 420)
+add.constraint(lprec, c(1, 0, 0, 15, 0, 0, 0, 1, 0, 900, 450), ">=", 360)
+add.constraint(lprec, c(1, 0, 0, 12, 0, 0, 0, 0, 1, 900, 450), ">=", 300)
+
+# 3 constrains for the in-process storage space available for a day's production of the three plants
+add.constraint(lprec, c(0, 1, 0, 0, 20, 0, 1, 0, 0, -750, 0), ">=", 420)
+add.constraint(lprec, c(0, 1, 0, 0, 15, 0, 0, 1, 0, -750, 0), ">=", 360)
+add.constraint(lprec, c(0, 1, 0, 0, 12, 0, 0, 0, 1, -750, 0), ">=", 300)
+
+# 3 constrains for the Sales Forecasting 
+add.constraint(lprec, c(0, 0, 1, 0, 0, 20, 1, 0, 0, 0, -750), ">=", 420)
+add.constraint(lprec, c(0, 0, 1, 0, 0, 15, 0, 1, 0, 0, -750), ">=", 360)
+add.constraint(lprec, c(0, 0, 1, 0, 0, 12, 0, 0, 1, 0, -750), ">=", 300)
+
+# Set bounds for variables.
+
+set.bounds(lprec, lower = c("-inf", "-inf"), columns = c(10, 11)) 
+
+# To identify the variables and constraints, we can
+# set variable names and names of the constraints
+
+ColNames <- c("A1", "A2", "A3", "B1", "B2", "B3", "C1", "C2", "C3", "h4", "h4")
+RowNames <- c("Capac1", "Capac2", "Capac3", "Storage1", "Storage2", "Storage3", "Sal-L", "Sal-M", "Sal-S")
+dimnames(lprec) <- list(RowNames, ColNames)
+
+# Now, print out the model
+lprec
+# The model can also be saved to a file
+write.lp(lprec, filename = "salsheh4_3.lp", type = "lp")
+```
+We now solve the above LP problem
+
+```{r}
+solve(lprec)
+get.objective(lprec)
+get.variables(lprec)
+get.constraints(lprec)
+
+```
+
+***
+```{r}
+get.sensitivity.rhs(lprec)  # get shadow prices
+get.sensitivity.obj(lprec)  # get reduced cost
+```
+
