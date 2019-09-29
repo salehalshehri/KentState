@@ -1,0 +1,25 @@
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(warning = FALSE, message = FALSE)
+dir.create("images")
+```
+
+***
+
+
+```{r}
+library(lpSolveAPI)
+x <- read.lp("4heart.lp")
+x
+```
+
+
+```{r}
+solve(x)
+get.objective(x)
+get.variables(x)
+get.constraints(x)
+get.sensitivity.objex(x)
+get.sensitivity.rhs(x)
+```
+***
