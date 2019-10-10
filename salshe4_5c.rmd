@@ -1,0 +1,21 @@
+---
+title: "Saleh ALshehri"
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+```{r}
+install.packages("lpSolveAPI"")
+library(lpSolveAPI)
+x <- read.lp("saleh_5.lp")
+x
+solve(x)
+get.objective(x)
+get.variables(x)
+```
+
