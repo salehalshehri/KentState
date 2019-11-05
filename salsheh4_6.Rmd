@@ -1,0 +1,63 @@
+---
+title: "assignmnet6"
+author: "saleh"
+date: "November 4, 2019"
+output: pdf_document
+---
+
+Q1 
+
+```{r}
+x <- matrix(c(150,400,320,520,350,320,0.2,0.7,1.2,2,1.2,0.7),ncol = 2)
+y <- matrix(c(14000,14000,42000,28000,19000,14000,3500,21000,10500,42000,25000,15000),ncol = 2)
+colnames(x) <- c("Staff","Supplies")
+colnames(y) <- c("Reimbursed","Private")
+x
+y
+```
+
+```{r}
+#install.packages("Benchmarking")
+library(Benchmarking)
+FDH <- dea(x,y,RTS = "fdh")             
+FDH
+peers(FDH)                          
+lambda(FDH)
+CRS <- dea(x,y,RTS = "crs")         
+CRS
+peers(CRS)                           
+lambda(CRS)
+VRS <- dea(x,y,RTS = "vrs")            
+VRS
+peers(VRS)                           
+lambda(VRS)
+IRS <- dea(x,y,RTS = "irs")           
+IRS
+peers(IRS)                             
+lambda(IRS)
+DRS <- dea(x,y,RTS = "drs")         
+DRS
+peers(DRS)                            
+lambda(DRS)
+FRH <- dea(x,y,RTS = "add")           
+FRH
+peers(FRH)                             
+lambda(FRH)
+
+```
+
+
+
+Q2
+
+```{r}
+library(lpSolveAPI)
+a <- read.lp("Goal.lp")
+a
+``` 
+## Solve
+```{r}
+solve(a)
+get.objective(a)
+get.variables(a)
+```
